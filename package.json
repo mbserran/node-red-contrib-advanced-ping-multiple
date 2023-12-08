@@ -1,28 +1,28 @@
 {
-  "name": "node-red-contrib-advanced-ping",
-  "version": "1.2.0",
-  "description": "A Node-RED node which takes input and pings a remote server.",
+  "name": "node-red-contrib-advanced-ping-multiple",
+  "version": "1.3.0",
+  "description": "A Node-RED node which takes input and pings a remote server or multiple servers.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/emiloberg/node-red-contrib-advanced-ping.git"
+    "url": "https://github.com/mbserran/node-red-contrib-advanced-ping-multiple.git"
   },
   "keywords": [
     "node-red",
-    "node-red-contrib",
+    "node-red-contrib-multiple",
     "contrib",
     "ping"
   ],
   "node-red": {
     "nodes": {
-      "file-function": "advanced-ping/advanced-ping.js"
+      "file-function": "ping-many/ping-many.js"
     }
   },
   "author": {
-    "name": "Emil Oberg"
+    "name": "mbserran"
   },
   "license": "Apache",
   "bugs": {
-    "url": "https://github.com/emiloberg/node-red-contrib-advanced-ping/issues"
+    "url": "https://github.com/mbserran/node-red-contrib-advanced-ping-multiple/issues"
   },
-  "homepage": "https://github.com/emiloberg/node-red-contrib-advanced-ping"
+  "homepage": "https://github.com/mbserran/node-red-contrib-advanced-ping-multiple"
 }
