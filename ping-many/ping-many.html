@@ -12,7 +12,7 @@
   limitations under the License.
 -->
 
-<script type="text/x-red" data-template-name="adv ping">
+<script type="text/x-red" data-template-name="ping-many">
     <div class="form-row">
         <label for="node-input-host"><i class="fa fa-dot-circle-o"></i> Host</label>
         <input type="text" id="node-input-host" placeholder="www.google.com">
@@ -23,15 +23,15 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="ping many">
+<script type="text/x-red" data-help-name="ping-many">
     <p>Pings a machine and returns the trip time in ms. Will perform ping on <b>any</b> input.</p>
     <p>Returns <b>false</b> if no response received within 5 seconds,  or if the host is unresolveable.</p>
     <p>Host set in configuration may be overridden by passing in a host in <code>msg.host</code>.</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('ping many',{
-        category: 'advanced-input',
+    RED.nodes.registerType('ping-many',{
+        category: 'network',
         color:"#fdf0c2",
         defaults: {
             name: {value:""},
