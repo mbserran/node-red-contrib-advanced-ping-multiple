@@ -86,5 +86,5 @@ module.exports = function(RED) {
 		});
 
     }
-    RED.nodes.registerType("ping many",PingNode);
+    RED.nodes.registerType("ping-many",PingNode);
 }

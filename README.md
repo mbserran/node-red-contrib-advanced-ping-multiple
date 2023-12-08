@@ -1,4 +1,4 @@
-# node-red-contrib-advanced-ping
+# node-red-contrib-advanced-ping-multiple
 
 A <a href="http://nodered.org" target="_new">Node-RED</a> node which takes input and pings a remote server.
 
