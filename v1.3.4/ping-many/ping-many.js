@@ -22,12 +22,9 @@ module.exports = function(RED) {
 
 		this.on("input", function (msg) {
 			var host = msg.host || node.host;
-			var tout = 5;  // timeout in secs for every ping
-			var delta = 25;  // time in msecs to wait between pings
-			var compact_format = true;  // indicate the kind of object to return - compact means only delay in an array
+			var tout = 5;
 			var sent = false;
 
-			// Promise function to return ping delay object of host 'value'
 			var MapPing = function (value) {
 				return new Promise(function(resolve, reject) {
 					if (typeof(value) == 'undefined') resolve(null);
@@ -59,43 +56,14 @@ module.exports = function(RED) {
 						}
 						//node.warn('[ping] res: ' + value + ' - ' + res.toString());
 						if (code === 0) {
-							if (compact_format) {
-								resolve(res);
-							} else {
-								resolve({'host': value, 'delay': res});
-							}
+							resolve({'host': value, 'delay': res});
 						} else {
-							if (compact_format) {
-								resolve(-1000);  // Value to indicate no response to ping
-							} else {
-								resolve({'host': value, 'delay': -1000});  // Value to indicate no response to ping
-							}
+							resolve({'host': value, 'delay': -1000});  // Value to indicate no response to ping
 						}
 					});
 				});
 			};
-			
-			// Function to process the ping value of a server 'servidor' in the index of the array 'index'
-			function ProcessPing (servidor, index) {
-			
-				// Call the Promise function to ping 'servidor' host - Return a message once all hosts have been processed
-				MapPing(servidor).then(
-					function(result) {
-						msg.payload[index] = result;
-						if (msg.payload.length == host.length) {
-							if (!sent) {
-								sent = true;
-								node.send(msg);
-							}
-						}
-					},
-					function(error) {
-						node.error(error);
-					}
-				);
-			}
 
-			// Process input parameters - Keep payload and topic for backwards compatibility and check timeout, delta and format
 			if(msg.hasOwnProperty('payload')) {
 				msg._payload = msg.payload;
 			}
@@ -107,38 +75,35 @@ module.exports = function(RED) {
 			} else {
 				tout = 5;
 			}
-			if(msg.hasOwnProperty('delta')) {
-				delta = (isNaN(msg.delta)?25:parseInt(msg.delta,10));
-			} else {
-				delta = 25;
-			}
-			if(msg.hasOwnProperty('compact')) {
-				compact_format = (msg.compact?true:false);
-			} else {
-				compact_format = true;
-			}
 			msg.payload = [];
 			msg.topic = host;
 			msg.timeout = tout;
-			msg.delta = delta;
-			msg.compact = compact_format;
-			
-			// Check that host exist
+
 			if (!host) {
 				node.warn('No host is specificed. Either specify in node configuration or by passing in msg.host');
 			}
 			
-			// Process the array of hosts or the standalone one
 			if (Array.isArray(host)) {
 				for (let i = 0; i < host.length; i++) {
-					if (typeof(host[i]) != 'undefined') {
-						var myPing = setTimeout(ProcessPing, delta, host[i], i);
-					}
+					MapPing(host[i]).then(
+						function(result) {
+							msg.payload[i] = result;
+							if (msg.payload.length == host.length) {
+								if (!sent) {
+									sent = true;
+									node.send(msg);
+								}
+							}
+						},
+						function(error) {
+							node.error(error);
+						}
+					);
 				}
 			} else {
 				MapPing(host).then(
 					function(result) {
-						msg.payload = result;
+						msg.payload[0] = result;
 						node.send(msg);},
 					function(error) {
 						node.error(error);}

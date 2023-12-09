@@ -22,7 +22,7 @@ Run the following command in the root directory of your Node-RED install
   * Incoming `msg.topic` data will be outputted as `msg._topic` (as the new `msg.topic` will contain the the host).
 
 ## Todo
-Ability to set ping options in node configuration/by incomming message. Right now, these settings are hardcoded except timeout. Default is 5secs but you can override it by passing a msg.timeout value in seconds.
+Ability to set ping options in node configuration/by incomming message. Right now, these settings are hardcoded. You can override the timeout by passing a msg.timeout value in seconds.
 
 * Linux: -n -w 5 -c 1
 * Windows: -n 1 -w 5000
