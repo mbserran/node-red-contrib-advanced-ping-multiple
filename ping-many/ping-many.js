@@ -132,7 +132,7 @@ module.exports = function(RED) {
 			if (Array.isArray(host)) {
 				for (let i = 0; i < host.length; i++) {
 					if (typeof(host[i]) != 'undefined') {
-						var myPing = setTimeout(ProcessPing, delta, host[i], i);
+						var myPing = setTimeout(ProcessPing, delta*(i+1), host[i], i);  // Wait to its delta slot depending on the index
 					}
 				}
 			} else {
