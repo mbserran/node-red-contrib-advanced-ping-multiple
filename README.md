@@ -13,9 +13,10 @@ Run the following command in the root directory of your Node-RED install
 
 ## Usage
 
-* Pings a machine and returns the trip time in ms. Ping time is returned in `msg.payload`. Returns boolean **false** if no response received within 5 seconds, or if the host is unresolveable.
-* Will perform ping on **any** input.
-* You may override the host set in the configuration by passing in a value in `msg.host`. `msg.host`can be an array of hosts. In that case `msg.payload`will be an array with the delays or -1000 when unreachable.
+* Pings an array of machines and returns the trip time in ms. Ping time is returned in `msg.payload`. Returns Int -1000 if no response received within given `msg.timeout` in seconds (5 seconds being the default value), or if the host is unresolveable.
+* Will perform ping on **any** input and only once per machine.
+* You may override the host set in the configuration by passing in a value in `msg.host`. `msg.host`can be an array of hosts. In that case `msg.payload` will be an array with the delays or -1000 when unreachable. `Null` positions of the array will be preserved and presented as `null` in the `msg.pyload` output.
+* You may set a timeout for each machine's ping by pasing a value in seconds in `msg.timeout`. Also a delay between pings to different servers can be set by passing a value in miliseconds in `msg.delta`. Default values are 5 seconds and 25 miliseconds if no value is set on those message properties.
 * For legacy reasons, the node will output the host as `msg.topic` (the original [node-red-node-ping](https://github.com/node-red/node-red-nodes/tree/master/io/ping) does it this way).
 * Any incomming data will be passed on to the output.
   * Incoming `msg.payload` data will be outputted as `msg._payload` (as the new `msg.payload` will contain the result of the ping).
@@ -24,6 +25,6 @@ Run the following command in the root directory of your Node-RED install
 ## Todo
 Ability to set ping options in node configuration/by incomming message. Right now, these settings are hardcoded except timeout. Default is 5secs but you can override it by passing a msg.timeout value in seconds.
 
-* Linux: -n -w 5 -c 1
-* Windows: -n 1 -w 5000
-* Mac: -n -t 5 -c 1
+* Linux: -n -w `timeout` -c 1
+* Windows: -n 1 -w `timeout x1000`
+* Mac: -n -t `timeout` -c 1
