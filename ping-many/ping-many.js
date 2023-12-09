@@ -24,6 +24,7 @@ module.exports = function(RED) {
 		
 		this.on("input", function (msg) {
 			var host = msg.host || node.host;
+			var delay = [];
 			
 			function MapPing(value, index, array) {
 				var ex;
@@ -74,9 +75,9 @@ module.exports = function(RED) {
 			}
 			
 			if (Array.isArray(host)) {
-				const delay = host.map(MapPing);
+				delay = host.map(MapPing);
 			} else {
-				let delay = MapPing(host,null, null);
+				delay[0] = MapPing(host,null, null);
 			}				
 
 			msg.payload = delay;
