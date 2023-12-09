@@ -1,5 +1,5 @@
 {
-  "name": "@mbserran/node-red-contrib-advanced-ping-multiple",
+  "name": "node-red-contrib-advanced-ping-multiple",
   "version": "1.3.3",
   "description": "A Node-RED node which takes input and pings a remote server or multiple servers.",
   "repository": {
