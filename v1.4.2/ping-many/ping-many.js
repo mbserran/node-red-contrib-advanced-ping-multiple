@@ -31,15 +31,14 @@ module.exports = function(RED) {
 			var MapPing = function (value) {
 				return new Promise(function(resolve, reject) {
 					if (typeof(value) == 'undefined') resolve(null);
-
+					
 					var spawn = require('child_process').spawn;
 					var plat = require('os').platform();
 					var ex;
-					const opt = {detached: true, timeout: tout*1000};
-
-					if (plat == "linux") { ex = spawn('ping', ['-n', '-w', tout.toString(), '-c', '1', value], opt); }
-					else if (plat.match(/^win/)) { ex = spawn('ping', ['-n', '1', '-w', (1000*tout).toString(), value], opt); }
-					else if (plat == "darwin") { ex = spawn('ping', ['-n', '-t', tout.toString(), '-c', '1', value], opt); }
+						
+					if (plat == "linux") { ex = spawn('ping', ['-n', '-w', tout.toString(), '-c', '1', value]); }
+					else if (plat.match(/^win/)) { ex = spawn('ping', ['-n', '1', '-w', (1000*tout).toString(), value]); }
+					else if (plat == "darwin") { ex = spawn('ping', ['-n', '-t', tout.toString(), '-c', '1', value]); }
 					else { node.error("Sorry - your platform - "+plat+" - is not recognised."); }
 					var res = false;
 					var line = "";
@@ -72,17 +71,13 @@ module.exports = function(RED) {
 								resolve({'host': value, 'delay': -1000});  // Value to indicate no response to ping
 							}
 						}
-						ex.kill();
-					});
-					ex.on('exit', function() {
-						ex.kill();
 					});
 				});
 			};
-
+			
 			// Function to process the ping value of a server 'servidor' in the index of the array 'index'
 			function ProcessPing (servidor, index) {
-
+			
 				// Call the Promise function to ping 'servidor' host - Return a message once all hosts have been processed
 				MapPing(servidor).then(
 					function(result) {
@@ -127,12 +122,12 @@ module.exports = function(RED) {
 			msg.timeout = tout;
 			msg.delta = delta;
 			msg.compact = compact_format;
-
+			
 			// Check that host exist
 			if (!host) {
 				node.warn('No host is specificed. Either specify in node configuration or by passing in msg.host');
 			}
-
+			
 			// Process the array of hosts or the standalone one
 			if (Array.isArray(host)) {
 				for (let i = 0; i < host.length; i++) {
@@ -148,9 +143,9 @@ module.exports = function(RED) {
 					function(error) {
 						node.error(error);}
 				);
-			}
+			}				
 		});
     }
-
+	
     RED.nodes.registerType("ping-many",PingNode);
 }
