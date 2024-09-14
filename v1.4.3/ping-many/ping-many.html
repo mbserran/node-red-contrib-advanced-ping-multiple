@@ -1,0 +1,94 @@
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="ping-many">
+    <div class="form-row">
+        <label for="node-input-host"><i class="fa fa-dot-circle-o"></i> Host</label>
+        <input type="text" id="node-input-host" placeholder="www.google.com">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="ping-many">
+    <p>Pings multiple machines and returns the trip time in ms for each of them. It performs ping triggered on <b>any</b> input and makes it only once.</p>
+    <p>Returns <b>-1000</b> if no response received within 'timeout' seconds, or if the host is unresolveable.</p>
+    <p>Host set in configuration may be overridden by passing in a host in <code>msg.host</code>. This object can be set to an <b>array of hosts</b> in which case the answer will be an <b>array of RTTs</b></p>
+
+    <h3>Inputs</h3>
+		<dl class="message-properties">
+		  <dt class="optional">host <span class="property-type">string/array</span></dt>
+		  <dd> If not set in the node configuration panel, this property specifies the host (string) or list of hosts (array) to be ping-ed. </dd>
+		</dl>
+		<dl class="message-properties">
+		  <dt class="optional">timeout <span class="property-type">string/number</span></dt>
+		  <dd> This property sets the <code>timeout</code> in seconds to be used in every ping. If not set the node will use 5secs as default value. </dd>
+		</dl>
+		<dl class="message-properties">
+		  <dt class="optional">delta <span class="property-type">string/number</span></dt>
+		  <dd> This property sets the <code>delta</code> time in miliseconds to be used between pings to different servers in the array. If not set the node will use 25msecs as default value. </dd>
+		</dl>
+		<dl class="message-properties">
+		  <dt class="optional">compact <span class="property-type">boolean</span></dt>
+		  <dd> This property changes the format of the output. If set to true a compact format will be used, returning only a single RTT value or array of values. If set to false, an object like <code>{host: host_IP,delay: RTT}</code> will be returned. Default value is true in case it is not set. </dd>
+		</dl>
+		<dl class="message-properties">
+		  <dt class="optional">payload <span class="property-type">object</span></dt>
+		  <dd> This property is not used and will be passed onto <code>_payload</code> property for backwards compatibility with ping node. </dd>
+		</dl>
+		<dl class="message-properties">
+		  <dt class="optional">topic <span class="property-type">object</span></dt>
+		  <dd> This property is not used and will be passed onto <code>_topic</code> property for backwards compatibility with ping node. </dd>
+		</dl>
+
+	  <h3>Outputs</h3>
+		<dl class="message-properties">
+		  <dt>payload <span class="property-type">object/number</span></dt>
+		  <dd> The returned value of RTT in a single object or array of objects depending on <code>msg.host</code> input. The elements of this array / object may be objects as <code>{host: host_IP,delay: RTT}</code> or numbers showing the RTT values, depending on <code>msg.compact</code> input.</dd>
+		</dl>
+
+	  <h3>Details</h3>
+		<p>The node is used to ping a single host or multiple hosts in an array.<br>
+		Ping will be done only once and only when triggered by any message received at its input.<br>
+		You can modify the ping timeout and the delay between pings to the different servers provided, in order to avoid too much concurrency.<br>
+		The output can be a full object-like array with the RTTs and host IPs of the different servers or just an array of RTTs values<br></p>
+
+	  <h3>References</h3>
+		<ul>
+		  <li><a href="https://github.com/mbserran/node-red-contrib-advanced-ping-multiple">GitHub</a> - the nodes github repository</li>
+		</ul>
+
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('ping-many',{
+        category: 'network',
+        color:"#fdf0c2",
+        defaults: {
+            name: {value:""},
+            host: {value:""}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "font-awesome/fa-flash",
+        label: function() {
+            return this.name || this.host || 'ping many';
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>

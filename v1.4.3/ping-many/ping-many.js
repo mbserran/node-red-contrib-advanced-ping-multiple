@@ -50,8 +50,7 @@ module.exports = function(RED) {
 					});
 					ex.stderr.on('data', function (data) {
 						//node.error('[ping] stderr: ' + data);
-						//reject(Error('[ping] stderr: ' + data));
-						line += data.toString();
+						reject(Error('[ping] stderr: ' + data));
 					});
 					ex.on('close', function (code) {
 						var m = regex.exec(line)||"";
